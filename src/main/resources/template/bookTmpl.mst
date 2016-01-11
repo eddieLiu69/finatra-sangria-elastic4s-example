@@ -1,0 +1,37 @@
+{{#books}}
+<section class="book-card section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+    <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone mdl-color--teal-100 mdl-color-text--white">
+        <i class="material-icons">play_circle_filled</i>
+    </header>
+    <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
+        <div class="mdl-card__supporting-text card-content">
+            <h4>{{title}}</h4>
+            <div class="mdl-grid">
+                <div class="mdl-cell mdl-cell--2-col title">Desc</div>
+                <div class="mdl-cell mdl-cell--10-col">{{desc}}</div>
+
+                <div class="mdl-cell mdl-cell--2-col title">Author</div>
+                <div class="mdl-cell mdl-cell--10-col">{{author}}</div>
+
+                <div class="mdl-cell mdl-cell--2-col title">Publisher</div>
+                <div class="mdl-cell mdl-cell--10-col">{{publisher}}</div>
+
+                <div class="mdl-cell mdl-cell--2-col title">ISBN</div>
+                <div class="mdl-cell mdl-cell--10-col">{{ISBN}}</div>
+            </div>
+        </div>
+    </div>
+    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="{{id}}">
+        <i class="material-icons">more_vert</i>
+    </button>
+    <ul class="book-menu mdl-menu mdl-js-menu mdl-menu--bottom-right" for="{{id}}">
+        <li class="mdl-menu__item" action="U">Update</li>
+        <li class="mdl-menu__item" action="D">Delete</li>
+    </ul>
+</section>
+{{/books}}
+{{^books}}
+<section class="book-card">
+    <i class="material-icons">mood_bad</i><h5 style="padding-left: 10px; display: inline-block; vertical-align: super">No Record Found...</h5>
+</section>
+{{/books}}

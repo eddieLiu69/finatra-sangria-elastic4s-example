@@ -1,0 +1,27 @@
+<form id="book-form" action="#">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="txtTitle" {{#title}}value="{{.}}"{{/title}} required>
+        <label class="mdl-textfield__label" for="txtTitle">Title</label>
+        <span class="mdl-textfield__error">Required...</span>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="txtDesc" {{#desc}}value="{{.}}"{{/desc}} required>
+        <label class="mdl-textfield__label" for="txtDesc">Description</label>
+        <span class="mdl-textfield__error">Required...</span>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="txtAuthor" {{#author}}value="{{.}}"{{/author}} required>
+        <label class="mdl-textfield__label" for="txtTitle">Author</label>
+        <span class="mdl-textfield__error">Required...</span>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" id="txtPublisher" {{#publisher}}value="{{.}}"{{/publisher}} required>
+        <label class="mdl-textfield__label" for="txtPublisher">Publisher</label>
+        <span class="mdl-textfield__error">Required...</span>
+    </div>
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="txtISBN" {{#ISBN}}value="{{.}}"{{/ISBN}} required>
+        <label class="mdl-textfield__label" for="txtISBN">ISBN</label>
+        <span class="mdl-textfield__error">Number required...</span>
+    </div>
+</form>

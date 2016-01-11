@@ -1,0 +1,14 @@
+{{<layout.mustache}}
+{{$content}}
+<div class="mdl-layout__tab-panel is-active" id="library">
+    <section class="section--footer mdl-grid"></section>
+</div>
+{{/content}}
+{{$scripts}}
+<script>
+    $(function() {
+        new com.eddie.example.BookApp($("#library"));
+    })
+</script>
+{{/scripts}}
+{{/layout.mustache}}
