@@ -22,4 +22,8 @@ class BookServer extends HttpServer {
       .add[BookController]
       .add[AssetController]
   }
+
+  override def warmup() {
+    run[WarmupHandler]()
+  }
 }

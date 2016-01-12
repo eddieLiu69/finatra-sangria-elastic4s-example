@@ -18,7 +18,7 @@ module com.eddie.example {
 
         constructor(private container: JQuery) {
             this.bindEvents();
-            this.refresh(0);
+            this.refresh();
         }
 
         loading() {
@@ -26,10 +26,10 @@ module com.eddie.example {
         }
 
         bindEvents() {
-            $("button#add").on('click', () => new BookCreationModal().run().done(() => this.refresh(800)));
+            $("button#add").on('click', () => new BookCreationModal().run().done(() => this.refresh()));
 
             $("#keyword-bar #txtKeyword").keyup((e: any) => {
-                if (e.keyCode == 13) this.refresh(0, e.target.value);
+                if (e.keyCode == 13) this.refresh(e.target.value);
             });
 
             $('main').on('click', '.mdl-menu__item', (e) => {
@@ -39,11 +39,11 @@ module com.eddie.example {
 
                 switch (action) {
                     case 'U':
-                        new BookUpdateModal(entityId).run().done(() => this.refresh(1000));
+                        new BookUpdateModal(entityId).run().done(() => this.refresh());
                         break;
                     case 'D':
                         $.confirm("Delete specific book?",
-                            () => this._bookRepo.deleteBook(entityId).done(() => this.refresh(1000)))
+                            () => this._bookRepo.deleteBook(entityId).done(() => this.refresh()))
                         break;
                     default:
                         throw `Unknow action type: ${action}`;
@@ -62,13 +62,18 @@ module com.eddie.example {
             });
         }
 
-        refresh(latency: number, keyword?: string) {
+        refresh(keyword?: string) {
             $.progress();
-            //ES is NEAR REAL TIME Search Engine
-            setTimeout(() => this._bookRepo.getBooks(keyword).done((rlt) => {
+            this._bookRepo.getBooks(keyword).done((rlt) => {
                 $.progress(false);
                 this.render(this.container, rlt.data.books);
-            }), latency);
+            });
+
+            //ES is NEAR REAL TIME Search Engine
+            //setTimeout(() => this._bookRepo.getBooks(keyword).done((rlt) => {
+            //    $.progress(false);
+            //    this.render(this.container, rlt.data.books);
+            //}), latency);
         }
     }
 

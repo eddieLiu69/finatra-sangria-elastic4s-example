@@ -16,7 +16,7 @@ var com;
                     this.container = container;
                     this._bookRepo = new BookRepo();
                     this.bindEvents();
-                    this.refresh(0);
+                    this.refresh();
                 }
                 Object.defineProperty(BookApp.prototype, "contentTmpl", {
                     get: function () {
@@ -38,19 +38,19 @@ var com;
                 };
                 BookApp.prototype.bindEvents = function () {
                     var _this = this;
-                    $("button#add").on('click', function () { return new BookCreationModal().run().done(function () { return _this.refresh(800); }); });
+                    $("button#add").on('click', function () { return new BookCreationModal().run().done(function () { return _this.refresh(); }); });
                     $("#keyword-bar #txtKeyword").keyup(function (e) {
                         if (e.keyCode == 13)
-                            _this.refresh(0, e.target.value);
+                            _this.refresh(e.target.value);
                     });
                     $('main').on('click', '.mdl-menu__item', function (e) {
                         var target = $(e.target), action = target.attr('action'), entityId = target.parent().attr('for');
                         switch (action) {
                             case 'U':
-                                new BookUpdateModal(entityId).run().done(function () { return _this.refresh(1000); });
+                                new BookUpdateModal(entityId).run().done(function () { return _this.refresh(); });
                                 break;
                             case 'D':
-                                $.confirm("Delete specific book?", function () { return _this._bookRepo.deleteBook(entityId).done(function () { return _this.refresh(1000); }); });
+                                $.confirm("Delete specific book?", function () { return _this._bookRepo.deleteBook(entityId).done(function () { return _this.refresh(); }); });
                                 break;
                             default:
                                 throw "Unknow action type: " + action;
@@ -68,14 +68,18 @@ var com;
                         componentHandler.upgradeElements($.map(elements, function (val) { return val; }));
                     });
                 };
-                BookApp.prototype.refresh = function (latency, keyword) {
+                BookApp.prototype.refresh = function (keyword) {
                     var _this = this;
                     $.progress();
-                    //ES is NEAR REAL TIME Search Engine
-                    setTimeout(function () { return _this._bookRepo.getBooks(keyword).done(function (rlt) {
+                    this._bookRepo.getBooks(keyword).done(function (rlt) {
                         $.progress(false);
                         _this.render(_this.container, rlt.data.books);
-                    }); }, latency);
+                    });
+                    //ES is NEAR REAL TIME Search Engine
+                    //setTimeout(() => this._bookRepo.getBooks(keyword).done((rlt) => {
+                    //    $.progress(false);
+                    //    this.render(this.container, rlt.data.books);
+                    //}), latency);
                 };
                 return BookApp;
             })();

@@ -36,6 +36,7 @@ class BookService @Inject()
   def addBook(book: BookCreationModel): Book = {
     val future = this.elasticClient.execute(index into _index / _type source book)
     val resp = Await.result(future, timeout.seconds)
+    refreshIndex
     Book(resp.getId, book.title, book.desc, book.author, book.publisher, book.ISBN)
   }
 
@@ -44,6 +45,7 @@ class BookService @Inject()
     //    val future = this.client.execute(req).map(rlt => rlt.getGetResult.sourceAsString)
     val resp: UpdateResponse = Await.result(this.elasticClient.execute(req), timeout.seconds)
     val map = resp.getGetResult.sourceAsMap
+    refreshIndex
     parseToBook(resp.getId, Some(map))
   }
 
@@ -51,6 +53,7 @@ class BookService @Inject()
     val req = delete4s id id from _index -> _type
     val future = this.elasticClient.execute(req) map (res => (res.getId, res.getIndex))
     Await.result(future, timeout.seconds)
+    refreshIndex
     id
   }
 
@@ -58,6 +61,22 @@ class BookService @Inject()
     map match {
       case Some(null) => None
       case Some(map) => Some(Book(id, map.get("title").toString, map.get("desc").toString, map.get("author").toString, map.get("publisher").toString, map.get("ISBN").toString.toInt))
+    }
+  }
+
+  private def isIndexExists(): Boolean = {
+    val req = indexExists(this._index)
+    Await.result(this.elasticClient.execute(req), timeout.seconds).isExists
+  }
+
+  //refresh data manually
+  def refreshIndex() = {
+    Await.result(this.elasticClient.execute(refresh index this._index), timeout.seconds)
+  }
+
+  def checkAndInitIndex() = {
+    if (!this.isIndexExists) {
+      this.elasticClient.execute(create index this._index)
     }
   }
 }
