@@ -9,7 +9,7 @@ declare module com.eddie.example {
         loading(): void;
         bindEvents(): void;
         render(container: JQuery, data: any): void;
-        refresh(latency: number, keyword?: string): void;
+        refresh(keyword?: string): void;
     }
     abstract class BookModal {
         private title;
